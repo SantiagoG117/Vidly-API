@@ -1,19 +1,18 @@
 // This module contains all the logic for defining and validating a Customer
 
 const Joi = require("joi");
-
 const mongoose = require("../db/dbConnection");
-const Genres = mongoose.model(
-  "Genre",
-  mongoose.Schema({
-    name: {
-      type: String,
-      required: true,
-      minlength: 5,
-      maxlength: 20,
-    },
-  })
-);
+
+const genreSchema = mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 20,
+  },
+});
+
+const Genres = mongoose.model("Genre", genreSchema);
 
 function validate(genre) {
   const schema = Joi.object({
@@ -22,5 +21,6 @@ function validate(genre) {
   return schema.validate(genre);
 }
 
-exports.Genres = Genres
-exports.validate = validate
+exports.genreSchema = genreSchema;
+exports.Genres = Genres;
+exports.validate = validate;

@@ -14,8 +14,6 @@ const router = express.Router();
 //? Get the genres model and its validation
 const { Genres, validate } = require("../models/genresModel");
 
-// const { Genre } = require("../db/dbConnection");
-
 //? Add routes to the router
 //GET all
 router.get("/", async (req, res) => {
@@ -84,7 +82,7 @@ router.put("/:id", async (req, res) => {
 
 //DELETE
 router.delete("/:id", async (req, res) => {
-  //Get the genre under the provided id or return 400 if the genre does not exist
+  //Get the genre under the provided id or return 404 if the genre does not exist
   const genre = await Genres.findById(req.params.id);
   if (!genre) res.status(404).send("There are no genres under the provided id");
 

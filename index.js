@@ -16,6 +16,8 @@ const genres = require("./routes/genres");
 app.use("/api/genres", genres); // For routes starting with /api/genres use the genres router
 const customers = require("./routes/customers");
 app.use("/api/customers", customers);
+const movies = require("./routes/movies");
+app.use("/api/movies", movies);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}`));
