@@ -6,17 +6,4 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log("Could not connect to MongoDB...", err));
 
-//? Models:
-const Genres = mongoose.model(
-  "Genre",
-  mongoose.Schema({
-    name: {
-      type: String,
-      required: true,
-      minlength: 5,
-      maxlength: 20,
-    },
-  })
-);
-
-module.exports = Genres;
+module.exports = mongoose;

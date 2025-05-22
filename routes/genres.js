@@ -11,19 +11,19 @@
 const express = require("express");
 const router = express.Router();
 
-//? Get the MongoDB model for genres
-const Genre = require("../db/dbConnection");
+//? Get the genres model and its validation
+const { Genres, validate } = require("../models/genresModel");
 
-const Joi = require("joi");
+// const { Genre } = require("../db/dbConnection");
 
 //? Add routes to the router
 //GET all
 router.get("/", async (req, res) => {
-  const genres = await Genre.find().sort("name");
+  const genres = await Genres.find().sort("name");
   res.send(genres);
 });
 
-//GET one
+//GET/:id
 router.get("/:id", async (req, res) => {
   /* 
     Route parameters: 
@@ -33,9 +33,8 @@ router.get("/:id", async (req, res) => {
     To access route parameters we must call req.params.id
   */
   //Get the genre under the provided id or return 400 if the genre does not exist
-  const genre = await Genre.findById(req.params.id);
-  if (!genre)
-    return res.status(404).send("There are no genres under the provided id");
+  const genre = await Genres.findById(req.params.id);
+  if (!genre) res.status(404).send("There are no genres under the provided id");
 
   res.send(genre);
 });
@@ -44,14 +43,14 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   //Validate the object send by the request
   const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error) res.status(400).send(error.details[0].message);
 
-  //Build a genre object from the object sent in the body of the request
-  const genre = new Genre({
+  //Build a customer object mapping the properties of the object sent in the body of the request
+  const genre = new Genres({
     name: req.body.name,
   });
 
-  //Save the genre to the MongoDB database
+  //Save the genre to the Genres collection
   try {
     const result = await genre.save(); //Returns the genre object saved in the database
     //Return the newly created genre in the body of the response
@@ -65,46 +64,40 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   //Validate the object sent in the body of the request
   const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error) res.status(400).send(error.details[0].message);
 
-  //Get the genre under the provided id or return 400 if the genre does not exist
-  const genre = await Genre.findById(req.params.id);
-  if (!genre)
-    return res.status(404).send("There are no genres under the provided id");
+  //Get the genre under the provided id or return 404 if the genre does not exist
+  const genre = await Genres.findById(req.params.id);
+  if (!genre) res.status(404).send("There are no genre under the provided id");
 
   //Modify the properties of the object
   genre.name = req.body.name;
 
   //Save the object back to the collection and return it
-  const result = await genre.save();
-  res.send(result);
+  try {
+    const result = await genre.save();
+    res.send(result);
+  } catch (ex) {
+    res.send(ex.errors.message);
+  }
 });
 
 //DELETE
 router.delete("/:id", async (req, res) => {
   //Get the genre under the provided id or return 400 if the genre does not exist
-  const genre = await Genre.findById(req.params.id);
-  if (!genre)
-    return res.status(404).send("There are no genres under the provided id");
+  const genre = await Genres.findById(req.params.id);
+  if (!genre) res.status(404).send("There are no genres under the provided id");
 
-  const result = await Genre.deleteOne({ _id: genre.id });
+  const result = await Genres.deleteOne({ _id: genre.id });
 
   if (result.acknowledged) res.send(genre);
   else
     res
       .status(409)
       .send(
-        "Request is valid but cannot be processed due to a problem on the serve"
+        "Request was valid but could not be processed due to a problem on the server. Plase try again later."
       );
 });
-
-//* Global functions
-function validate(genre) {
-  const schema = Joi.object({
-    name: Joi.string().min(3).required(),
-  });
-  return schema.validate(genre);
-}
 
 //? Export the router:
 module.exports = router;

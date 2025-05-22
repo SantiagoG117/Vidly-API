@@ -10,10 +10,12 @@ app.use(express.json()); // Reads the request and parses it body into a JSON obj
 app.set("view engine", "pug");
 
 //? Routers
-const genres = require("./routes/genres");
-app.use("/api/genres", genres); // For routes starting with /api/genres use the genres router
 const home = require("./routes/home");
 app.use("/", home);
+const genres = require("./routes/genres");
+app.use("/api/genres", genres); // For routes starting with /api/genres use the genres router
+const customers = require("./routes/customers");
+app.use("/api/customers", customers);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}`));
