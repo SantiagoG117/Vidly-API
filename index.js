@@ -1,4 +1,6 @@
 require("dotenv").config();
+const Joi = require("joi");
+Joi.objectId = require("joi-objectid")(Joi);
 //?Build the server
 const express = require("express"); //the express module returns a function
 const app = express(); //We can use that function to create an express object called app that will represent our application
@@ -18,6 +20,8 @@ const customers = require("./routes/customers");
 app.use("/api/customers", customers);
 const movies = require("./routes/movies");
 app.use("/api/movies", movies);
+const rentals = require("./routes/rentals");
+app.use("/api/rentals", rentals);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}`));
