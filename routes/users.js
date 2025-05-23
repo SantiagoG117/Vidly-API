@@ -2,14 +2,16 @@
 const express = require("express");
 const router = express.Router();
 
+//? Import third party libraries
 const lodash = require("lodash");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const config = require("config");
 
-//?Export the model and validation
+//?Import the model and validation
 const { User, validate } = require("../models/usersModel");
 
 //? Build routes
-
 //GET
 router.get("/", async (req, res) => {
   const registrations = await User.find();
@@ -22,6 +24,7 @@ router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
+  //Validate that the user does not already exist
   const userExist = await User.findOne({ email: req.body.email });
   if (userExist)
     return res.status(400).send("Email already exists on the server");
@@ -43,9 +46,19 @@ router.post("/", async (req, res) => {
 
   //Save the user to the Users collection
   user = await user.save();
+  /*
+    When the user registers, log them in into the application automatically. 
+    Resturn the JSON Web token as a header so the client can store it and use it 
+    in the future
 
-  //Returned a simplified object to the client
-  res.send(lodash.pick(user, ["_id", "name", "email"]));
+    By convention all custom headers should be prefix with 'x-'
+  */
+  const token = jwt.sign({ _id: user._id }, config.get("jwtPrivateKey"));
+
+  //Returned a simplified object to the client algong with the JSON web tocken in a header
+  res
+    .header("x-auth-token", token)
+    .send(lodash.pick(user, ["_id", "name", "email"]));
 });
 
 //?Export router

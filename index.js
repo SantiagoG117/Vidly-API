@@ -1,6 +1,6 @@
 require("dotenv").config();
-const Joi = require("joi");
-Joi.objectId = require("joi-objectid")(Joi);
+const config = require("config");
+
 //?Build the server
 const express = require("express"); //the express module returns a function
 const app = express(); //We can use that function to create an express object called app that will represent our application
@@ -24,6 +24,13 @@ const rentals = require("./routes/rentals");
 app.use("/api/rentals", rentals);
 const registrations = require("./routes/users");
 app.use("/api/users", registrations);
+const auth = require("./routes/auth");
+app.use("/api/auth", auth);
+
+if (!config.get("jwtPrivateKey")) {
+  console.error("FATAL ERROR: jwtPrivateKey is not defined");
+  process.exit(1);
+}
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}`));
