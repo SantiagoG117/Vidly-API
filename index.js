@@ -22,6 +22,8 @@ const movies = require("./routes/movies");
 app.use("/api/movies", movies);
 const rentals = require("./routes/rentals");
 app.use("/api/rentals", rentals);
+const registrations = require("./routes/users");
+app.use("/api/users", registrations);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}`));

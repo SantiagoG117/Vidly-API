@@ -1,0 +1,15 @@
+    Authentication: 
+        - The process of verifying if the user is who they claim they are.
+        - Happens at login when the username and password is sent to the server and the server authenticate the credentials
+    
+    Authorization: 
+        - The process of dermine if the user has the right permission to perform the given operation
+        - Make sure that only authenticated users (users that logged in successfully) can perform operations that modify the data
+        - Users that have not logged in can only read the data from our endpoints
+        - Only admin users can delete data (Second level of authorization)
+
+    TODO: 
+        ! Add an endpoint for login an user:
+            - Create a new loggin request. To do so we must use POST /api/logins 
+            - Store active logins in our application in a MongoDB collection
+
