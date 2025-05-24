@@ -6,11 +6,12 @@ const config = require("config");
     Takes a request object and either returns a response to the client (terminates the req-res life cycle) or passes the control to another Middleware function (next).
 */
 
-function auth(req, res, next) {
+// Impose authorization to allow users to modify data
+function authorization(req, res, next) {
   //Read the request header to find the JSON Web Token
   const token = req.header("x-auth-token");
   if (!token)
-    return res.status(401).send("Access denied. Token is not provided.");
+    return res.status(401).send("Access denied. No token was provided.");
 
   //Verify that the token is valid. If valid it will return the decoded payload, otherwise it will return an exception
   try {
@@ -24,4 +25,4 @@ function auth(req, res, next) {
   }
 }
 
-module.exports = auth;
+module.exports = authorization;

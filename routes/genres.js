@@ -15,7 +15,8 @@ const router = express.Router();
 const { Genres, validate } = require("../models/genresModel");
 
 //? Export middleware
-const auth = require("../middleware/authMiddleware");
+const authorization = require("../middleware/authorization");
+const isAdmin = require("../middleware/isAdmin");
 
 //? Add routes to the router
 //GET all
@@ -41,7 +42,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //POST
-router.post("/", auth, async (req, res) => {
+router.post("/", authorization, async (req, res) => {
   //Validate the object send by the request
   const { error } = validate(req.body);
   if (error) res.status(400).send(error.details[0].message);
@@ -62,7 +63,7 @@ router.post("/", auth, async (req, res) => {
 });
 
 //PUT
-router.put("/:id", auth, async (req, res) => {
+router.put("/:id", authorization, async (req, res) => {
   //Validate the object sent in the body of the request
   const { error } = validate(req.body);
   if (error) res.status(400).send(error.details[0].message);
@@ -84,7 +85,7 @@ router.put("/:id", auth, async (req, res) => {
 });
 
 //DELETE
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", [authorization, isAdmin], async (req, res) => {
   //Get the genre under the provided id or return 404 if the genre does not exist
   const genre = await Genres.findById(req.params.id);
   if (!genre) res.status(404).send("There are no genres under the provided id");

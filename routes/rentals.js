@@ -8,7 +8,7 @@ const { Customers } = require("../models/customersModel");
 const { Movies } = require("../models/moviesModel");
 
 //? Middleware
-const auth = require("../middleware/authMiddleware");
+const authorization = require("../middleware/authorization");
 
 //? Routes
 //GET
@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
 });
 
 //POST
-router.post("/", auth, async (req, res) => {
+router.post("/", authorization, async (req, res) => {
   //Validate the object sent by the client request
   const { error } = validate(req.body);
   if (error) res.send(error.details[0].message);
