@@ -10,7 +10,11 @@ const bcrypt = require("bcrypt");
 const { User, validate } = require("../models/usersModel");
 
 //? Middleware
+<<<<<<< HEAD
 const authorization = require("../middleware/authorization");
+=======
+const authorization = require("../middleware/authMiddleware");
+>>>>>>> a27517fadeae2777c6a2fc0ef0abee16945f255a
 
 //? Build routes
 //GET
