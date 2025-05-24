@@ -6,7 +6,7 @@ const router = express.Router();
 const { Customers, validate } = require("../models/customersModel");
 
 //? Middlewares
-const auth = require("../middleware/authMiddleware");
+const authorization = require("../middleware/authMiddleware");
 
 //? Routes to work with customers
 //GET:
@@ -27,7 +27,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //POST:
-router.post("/", auth, async (req, res) => {
+router.post("/", authorization, async (req, res) => {
   //Validate the object sent by the request
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -49,7 +49,7 @@ router.post("/", auth, async (req, res) => {
 });
 
 //PUT
-router.put("/:id", auth, async (req, res) => {
+router.put("/:id", authorization, async (req, res) => {
   //Validate the object sent in the body of the request
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);

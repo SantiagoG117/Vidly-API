@@ -7,7 +7,7 @@ const { Movies, validate } = require("../models/moviesModel");
 const { Genres } = require("../models/genresModel");
 
 //? Middleware
-const auth = require("../middleware/authMiddleware");
+const authorization = require("../middleware/authMiddleware");
 
 //? Add routes
 //GET
@@ -26,7 +26,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //POST
-router.post("/", auth, async (req, res) => {
+router.post("/", authorization, async (req, res) => {
   //Validate the object sent by the client
   const { error } = validate(req.body);
   if (error) res.status(400).send(error.details[0].message);
@@ -52,7 +52,7 @@ router.post("/", auth, async (req, res) => {
 });
 
 //PUT
-router.put("/:id", auth, async (req, res) => {
+router.put("/:id", authorization, async (req, res) => {
   //Validate the object sent in the body of the request
   const { error } = validate(req.body);
   if (error) res.status(400).send(error.details[0].message);

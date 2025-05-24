@@ -9,11 +9,22 @@ const bcrypt = require("bcrypt");
 //?Import the model and validation
 const { User, validate } = require("../models/usersModel");
 
+//? Middleware
+const authorization = require("../middleware/authMiddleware");
+
 //? Build routes
 //GET
 router.get("/", async (req, res) => {
   const registrations = await User.find();
   res.send(registrations);
+});
+
+//GET current logged in user
+router.get("/me", authorization, async (req, res) => {
+  //Get the user id from the JSON Web token (secure approach)
+  const userId = req.user._id;
+  const user = await User.findById(userId).select("-password");
+  res.send(user);
 });
 
 //POST

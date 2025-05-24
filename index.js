@@ -5,7 +5,7 @@ const config = require("config");
 const express = require("express"); //the express module returns a function
 const app = express(); //We can use that function to create an express object called app that will represent our application
 
-//?Middleware: 
+//?Middleware:
 app.use(express.json()); // Reads the request and parses it body into a JSON object, setting the req.body object
 
 //? View Engines
@@ -22,8 +22,8 @@ const movies = require("./routes/movies");
 app.use("/api/movies", movies);
 const rentals = require("./routes/rentals");
 app.use("/api/rentals", rentals);
-const registrations = require("./routes/users");
-app.use("/api/users", registrations);
+const users = require("./routes/users");
+app.use("/api/users", users);
 const auth = require("./routes/auth");
 app.use("/api/auth", auth);
 
