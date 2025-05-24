@@ -2,15 +2,13 @@
 const express = require("express");
 const router = express.Router();
 
+//? Models
 const { Rentals, validate } = require("../models/rentalsModels");
 const { Customers } = require("../models/customersModel");
 const { Movies } = require("../models/moviesModel");
 
-//Create a new rental
-//Post to /api/rentals
-
-//Get the list of rentals
-//GET /api/rentals
+//? Middleware
+const auth = require("../middleware/authMiddleware");
 
 //? Routes
 //GET
@@ -20,7 +18,7 @@ router.get("/", async (req, res) => {
 });
 
 //POST
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   //Validate the object sent by the client request
   const { error } = validate(req.body);
   if (error) res.send(error.details[0].message);

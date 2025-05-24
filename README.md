@@ -4,3 +4,6 @@ Express is a simple, minimalistic and lightweight framework for building web ser
 
 http://vidly.com/api include multiple endpoints like:
 /genres: each movie has a genre (Action, Horror, etc.)
+
+
+

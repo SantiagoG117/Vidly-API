@@ -6,8 +6,10 @@ const router = express.Router();
 const { Movies, validate } = require("../models/moviesModel");
 const { Genres } = require("../models/genresModel");
 
-//? Add routes
+//? Middleware
+const auth = require("../middleware/authMiddleware");
 
+//? Add routes
 //GET
 router.get("/", async (req, res) => {
   const movies = await Movies.find().sort("name");
@@ -24,7 +26,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //POST
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   //Validate the object sent by the client
   const { error } = validate(req.body);
   if (error) res.status(400).send(error.details[0].message);
@@ -50,7 +52,7 @@ router.post("/", async (req, res) => {
 });
 
 //PUT
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   //Validate the object sent in the body of the request
   const { error } = validate(req.body);
   if (error) res.status(400).send(error.details[0].message);

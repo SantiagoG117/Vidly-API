@@ -1,0 +1,2 @@
+To set up the JASON Web Token in PowerShell:
+$env:NODE_CONFIG='{"jwtPrivateKey":"mySecureKey"}'

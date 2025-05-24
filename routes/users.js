@@ -5,8 +5,6 @@ const router = express.Router();
 //? Import third party libraries
 const lodash = require("lodash");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const config = require("config");
 
 //?Import the model and validation
 const { User, validate } = require("../models/usersModel");
@@ -53,8 +51,7 @@ router.post("/", async (req, res) => {
 
     By convention all custom headers should be prefix with 'x-'
   */
-  const token = jwt.sign({ _id: user._id }, config.get("jwtPrivateKey"));
-
+  const token = user.generateAuthToken();
   //Returned a simplified object to the client algong with the JSON web tocken in a header
   res
     .header("x-auth-token", token)

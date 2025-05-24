@@ -5,8 +5,7 @@ const router = express.Router();
 //? Export third party libraries
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
-const jwt = require("jsonwebtoken");
-const config = require("config");
+
 
 //? Import the User model
 const { User } = require("../models/usersModel");
@@ -42,7 +41,7 @@ router.post("/", async (req, res) => {
 
   */
   //Return the JSON Web token
-  const token = jwt.sign({ _id: user._id }, config.get("jwtPrivateKey"));
+  const token = user.generateAuthToken();
   res.send(token);
 });
 

@@ -14,6 +14,9 @@ const router = express.Router();
 //? Get the genres model and its validation
 const { Genres, validate } = require("../models/genresModel");
 
+//? Export middleware
+const auth = require("../middleware/authMiddleware");
+
 //? Add routes to the router
 //GET all
 router.get("/", async (req, res) => {
@@ -38,12 +41,12 @@ router.get("/:id", async (req, res) => {
 });
 
 //POST
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   //Validate the object send by the request
   const { error } = validate(req.body);
   if (error) res.status(400).send(error.details[0].message);
 
-  //Build a customer object mapping the properties of the object sent in the body of the request
+  //Build a genre object mapping the properties of the object sent in the body of the request
   const genre = new Genres({
     name: req.body.name,
   });
@@ -59,7 +62,7 @@ router.post("/", async (req, res) => {
 });
 
 //PUT
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   //Validate the object sent in the body of the request
   const { error } = validate(req.body);
   if (error) res.status(400).send(error.details[0].message);
