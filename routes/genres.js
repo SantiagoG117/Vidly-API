@@ -15,12 +15,8 @@ const router = express.Router();
 const { Genres, validate } = require("../models/genresModel");
 
 //? Export middleware
-<<<<<<< HEAD
 const authorization = require("../middleware/authorization");
 const isAdmin = require("../middleware/isAdmin");
-=======
-const authorization = require("../middleware/authMiddleware");
->>>>>>> a27517fadeae2777c6a2fc0ef0abee16945f255a
 
 //? Add routes to the router
 //GET all
