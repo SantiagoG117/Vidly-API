@@ -8,11 +8,7 @@ const { Customers } = require("../models/customersModel");
 const { Movies } = require("../models/moviesModel");
 
 //? Middleware
-<<<<<<< HEAD
 const authorization = require("../middleware/authorization");
-=======
-const authorization = require("../middleware/authMiddleware");
->>>>>>> a27517fadeae2777c6a2fc0ef0abee16945f255a
 
 //? Routes
 //GET
