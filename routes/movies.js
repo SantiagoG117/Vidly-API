@@ -8,6 +8,7 @@ const { Genres } = require("../models/genresModel");
 
 //? Middleware
 const authorization = require("../middleware/authorization");
+const isAdmin = require("../middleware/isAdmin");
 
 //? Add routes
 //GET
@@ -80,7 +81,7 @@ router.put("/:id", authorization, async (req, res) => {
 });
 
 //DELETE
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", [authorization, isAdmin], async (req, res) => {
   //Get the movie under the provided id or return 404 if no movie exist
   const movie = await Movies.findById(req.params.id);
   if (!movie) res.status(404).send("No movie was found under the provided id");

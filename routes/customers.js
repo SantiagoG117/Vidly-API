@@ -7,6 +7,7 @@ const { Customers, validate } = require("../models/customersModel");
 
 //? Middlewares
 const authorization = require("../middleware/authorization");
+const isAdmin = require("../middleware/isAdmin");
 
 //? Routes to work with customers
 //GET:
@@ -40,12 +41,8 @@ router.post("/", authorization, async (req, res) => {
   });
 
   //Save the customer in the Customers collection
-  try {
-    const result = await customer.save();
-    res.send(result);
-  } catch (ex) {
-    res.send(ex.errors.message);
-  }
+  const result = await customer.save();
+  res.send(result);
 });
 
 //PUT
@@ -65,16 +62,12 @@ router.put("/:id", authorization, async (req, res) => {
   customer.phone = req.body.phone;
 
   //Save the updated customer back to the collection and return it
-  try {
-    const result = await customer.save();
-    res.send(result);
-  } catch (ex) {
-    res.send(ex.errors.message);
-  }
+  const result = await customer.save();
+  res.send(result);
 });
 
 //DELETE
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", [authorization, isAdmin], async (req, res) => {
   //Get the customer under the provided id or return 404 if it does not exist
   const customer = await Customers.findById(req.params.id);
   if (!customer)

@@ -8,7 +8,6 @@ const config = require("config");
 function isAdmin(req, res, next) {
   // Assumption: isAdmin is executed after the authorization middleware function, where a payload is assigned to the user property of the request body.
   if (!req.user.isAdmin) {
-    console.log(req.user.isAdmin);
     return res.status(403).send("Forbidden: Access denied");
   }
 

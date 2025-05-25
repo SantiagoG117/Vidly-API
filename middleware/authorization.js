@@ -13,7 +13,7 @@ function authorization(req, res, next) {
   if (!token)
     return res.status(401).send("Access denied. No token was provided.");
 
-  //Verify that the token is valid. If valid it will return the decoded payload, otherwise it will return an exception
+  //Verify against the private key if the token is valid. If valid it will return the decoded payload, otherwise it will return an exception
   try {
     const payload = jwt.verify(token, config.get("jwtPrivateKey"));
     //Attach the decoded payload to the request object as a property called user. Allowing us to access the authenticated user's info

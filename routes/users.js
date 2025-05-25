@@ -39,7 +39,9 @@ router.post("/", async (req, res) => {
     return res.status(400).send("Email already exists on the server");
 
   //Build a user object mapping the properties sent in the request object
-  let user = new User(lodash.pick(req.body, ["name", "email", "password"]));
+  let user = new User(
+    lodash.pick(req.body, ["name", "email", "password", "isAdmin"])
+  );
 
   /* 
     Hash the password:

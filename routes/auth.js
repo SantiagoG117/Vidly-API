@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
     The user sends the password in plain text, then the password is hashed and added
     the original salt used for the hashed password in database. Finally bcrypt compare 
     both the sent hashed password with the hashed password stored in the database. If they
-    are equal 
+    are equal a JSON Web Token is created
   */
   const user = await User.findOne({ email: req.body.email });
   if (!user) return res.status(400).send("Invalid email or password"); //Invalid request: Do not let the client know that the email does not exist

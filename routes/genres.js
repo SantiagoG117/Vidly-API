@@ -17,13 +17,18 @@ const { Genres, validate } = require("../models/genresModel");
 //? Export middleware
 const authorization = require("../middleware/authorization");
 const isAdmin = require("../middleware/isAdmin");
+const asyncMiddleware = require("../middleware/async");
 
 //? Add routes to the router
 //GET all
-router.get("/", async (req, res) => {
-  const genres = await Genres.find().sort("name");
-  res.send(genres);
-});
+router.get(
+  "/",
+  asyncMiddleware(async (req, res) => {
+    throw new Error("Could not get the genres");
+    const genres = await Genres.find().sort("name");
+    res.send(genres);
+  })
+);
 
 //GET/:id
 router.get("/:id", async (req, res) => {
@@ -34,7 +39,7 @@ router.get("/:id", async (req, res) => {
     
     To access route parameters we must call req.params.id
   */
-  //Get the genre under the provided id or return 400 if the genre does not exist
+  //Get the genre under the provided fid or return 400 if the genre does not exist
   const genre = await Genres.findById(req.params.id);
   if (!genre) res.status(404).send("There are no genres under the provided id");
 
@@ -53,13 +58,9 @@ router.post("/", authorization, async (req, res) => {
   });
 
   //Save the genre to the Genres collection
-  try {
-    const result = await genre.save(); //Returns the genre object saved in the database
-    //Return the newly created genre in the body of the response
-    res.send(result);
-  } catch (ex) {
-    res.send(ex.errors.message);
-  }
+  const result = await genre.save(); //Returns the genre object saved in the database
+  //Return the newly created genre in the body of the response
+  res.send(result);
 });
 
 //PUT
@@ -76,12 +77,8 @@ router.put("/:id", authorization, async (req, res) => {
   genre.name = req.body.name;
 
   //Save the object back to the collection and return it
-  try {
-    const result = await genre.save();
-    res.send(result);
-  } catch (ex) {
-    res.send(ex.errors.message);
-  }
+  const result = await genre.save();
+  res.send(result);
 });
 
 //DELETE
