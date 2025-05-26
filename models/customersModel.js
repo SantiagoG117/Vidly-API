@@ -1,7 +1,7 @@
 // This module contains all the logic for defining and validating a Customer
 
 const Joi = require("joi");
-const mongoose = require("../db/dbConnection");
+const mongoose = require("../startup/dbConnection");
 
 const customerSchema = mongoose.Schema({
   name: {

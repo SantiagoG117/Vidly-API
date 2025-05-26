@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const mongoose = require("../db/dbConnection");
+const mongoose = require("../startup/dbConnection");
 
 const Rentals = mongoose.model(
   "Rental",

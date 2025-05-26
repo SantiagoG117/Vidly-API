@@ -1,15 +1,15 @@
-//Factory function that takes a reference to route handler function and returns an anonymous function calling the route handler
-module.exports = function asyncMiddleware(routeHandler) {
-  /* 
-    Wrapps the route handler into another route handler function that provides the req, res and next parameters and calls the handler.
-    At runtime Express will called the wrapper route handler
-    */
+/* 
+  Factory function: Returns a reference of a route handler function that takes the req, res, next parameters. At runtime, Express will call this function reference
+  and pass the values for the req, res, next parameters, which are require to execute the logic of each route handler or pass control to the Error middleware in case of 
+  rejected promises. 
+*/
+module.exports = function (routeHandler) {
   return async (req, res, next) => {
     try {
-      await routeHandler(req, res); //Call the route handler
+      routeHandler(req, res); //At runtime the routeHandler is called with the values for req, res provided by Express
     } catch (ex) {
-      //Catch the error or the rejected promise and pass it to the Express error-handling middleware
-      next(ex); //Pass control to the error middleware with the exception
+      //Catch the error of the rejected promise and pass control to the Express error middleware with the exception
+      next(ex); //The value for next() is provided by Express at runtime.
     }
   };
 };

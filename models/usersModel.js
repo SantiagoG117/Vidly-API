@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 
 //? Export the DB connection
-const mongoose = require("../db/dbConnection");
+const mongoose = require("../startup/dbConnection");
 
 //? Build a schema
 const userSchema = mongoose.Schema({
