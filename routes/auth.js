@@ -6,11 +6,12 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
 
-
 //? Import the User model
 const { User } = require("../models/usersModel");
 
 //? Build routes
+
+//Loggin an user (Login authentication)
 router.post("/", async (req, res) => {
   //Validate the body of the request
   const { error } = validate(req.body);

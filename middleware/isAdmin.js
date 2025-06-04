@@ -1,6 +1,4 @@
-const jwt = require("jsonwebtoken");
-const config = require("config");
-
+ 
 /* 
 ?   Middleware function:
     Takes a request object and either returns a response to the client (terminates the req-res life cycle) or passes the control to another Middleware function (next).

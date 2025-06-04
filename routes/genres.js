@@ -30,72 +30,90 @@ router.get(
 );
 
 //GET/:id
-router.get("/:id", async (req, res) => {
-  /* 
+router.get(
+  "/:id",
+  asyncMiddleware(async (req, res) => {
+    /* 
     Route parameters: 
     Variables in the URL path that allow us to capture data from the URL and use it
     in the route handler
     
     To access route parameters we must call req.params.id
   */
-  //Get the genre under the provided fid or return 400 if the genre does not exist
-  const genre = await Genres.findById(req.params.id);
-  if (!genre) res.status(404).send("There are no genres under the provided id");
+    //Get the genre under the provided fid or return 400 if the genre does not exist
+    const genre = await Genres.findById(req.params.id);
+    if (!genre)
+      res.status(404).send("There are no genres under the provided id");
 
-  res.send(genre);
-});
+    res.send(genre);
+  })
+);
 
 //POST
-router.post("/", authorization, async (req, res) => {
-  //Validate the object send by the request
-  const { error } = validate(req.body);
-  if (error) res.status(400).send(error.details[0].message);
+router.post(
+  "/",
+  authorization,
+  asyncMiddleware(async (req, res) => {
+    //Validate the object send by the request
+    const { error } = validate(req.body);
+    if (error) res.status(400).send(error.details[0].message);
 
-  //Build a genre object mapping the properties of the object sent in the body of the request
-  const genre = new Genres({
-    name: req.body.name,
-  });
+    //Build a genre object mapping the properties of the object sent in the body of the request
+    const genre = new Genres({
+      name: req.body.name,
+    });
 
-  //Save the genre to the Genres collection
-  const result = await genre.save(); //Returns the genre object saved in the database
-  //Return the newly created genre in the body of the response
-  res.send(result);
-});
+    //Save the genre to the Genres collection
+    const result = await genre.save(); //Returns the genre object saved in the database
+    //Return the newly created genre in the body of the response
+    res.send(result);
+  })
+);
 
 //PUT
-router.put("/:id", authorization, async (req, res) => {
-  //Validate the object sent in the body of the request
-  const { error } = validate(req.body);
-  if (error) res.status(400).send(error.details[0].message);
+router.put(
+  "/:id",
+  authorization,
+  asyncMiddleware(async (req, res) => {
+    //Validate the object sent in the body of the request
+    const { error } = validate(req.body);
+    if (error) res.status(400).send(error.details[0].message);
 
-  //Get the genre under the provided id or return 404 if the genre does not exist
-  const genre = await Genres.findById(req.params.id);
-  if (!genre) res.status(404).send("There are no genre under the provided id");
+    //Get the genre under the provided id or return 404 if the genre does not exist
+    const genre = await Genres.findById(req.params.id);
+    if (!genre)
+      res.status(404).send("There are no genre under the provided id");
 
-  //Modify the properties of the object
-  genre.name = req.body.name;
+    //Modify the properties of the object
+    genre.name = req.body.name;
 
-  //Save the object back to the collection and return it
-  const result = await genre.save();
-  res.send(result);
-});
+    //Save the object back to the collection and return it
+    const result = await genre.save();
+    res.send(result);
+  })
+);
 
 //DELETE
-router.delete("/:id", [authorization, isAdmin], async (req, res) => {
-  //Get the genre under the provided id or return 404 if the genre does not exist
-  const genre = await Genres.findById(req.params.id);
-  if (!genre) res.status(404).send("There are no genres under the provided id");
+router.delete(
+  "/:id",
+  [authorization, isAdmin],
+  asyncMiddleware(async (req, res) => {
+    //Get the genre under the provided id or return 404 if the genre does not exist
+    const genre = await Genres.findById(req.params.id);
+    if (!genre)
+      res.status(404).send("There are no genres under the provided id");
 
-  const result = await Genres.deleteOne({ _id: genre.id });
+    const result = await Genres.deleteOne({ _id: genre.id });
 
-  if (result.acknowledged) res.send(genre);
-  else
-    res
-      .status(409)
-      .send(
-        "Request was valid but could not be processed due to a problem on the server. Plase try again later."
-      );
-});
+    if (result.acknowledged) res.send(genre);
+    else
+      res
+        .status(409)
+        .send(
+          "Request was valid but could not be processed due to a problem on the server. Plase try again later."
+        );
+  })
+);
 
 //? Export the router:
 module.exports = router;

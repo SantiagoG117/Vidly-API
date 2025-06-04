@@ -13,37 +13,48 @@ const { User, validate } = require("../models/usersModel");
 const authorization = require("../middleware/authorization");
 
 //? Build routes
+const asyncMiddleware = require("../middleware/async"); // Add this near the top with other requires
+
 //GET
-router.get("/", async (req, res) => {
-  const registrations = await User.find();
-  res.send(registrations);
-});
+router.get(
+  "/",
+  asyncMiddleware(async (req, res) => {
+    const registrations = await User.find();
+    res.send(registrations);
+  })
+);
 
 //GET current logged in user
-router.get("/me", authorization, async (req, res) => {
-  //Get the user id from the JSON Web token (secure approach)
-  const userId = req.user._id;
-  const user = await User.findById(userId).select("-password");
-  res.send(user);
-});
+router.get(
+  "/me",
+  authorization,
+  asyncMiddleware(async (req, res) => {
+    //Get the user id from the JSON Web token (secure approach)
+    const userId = req.user._id;
+    const user = await User.findById(userId).select("-password");
+    res.send(user);
+  })
+);
 
-//POST
-router.post("/", async (req, res) => {
-  //Validate the object in the body of the request
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+//POST (Register users)
+router.post(
+  "/",
+  asyncMiddleware(async (req, res) => {
+    //Validate the object in the body of the request
+    const { error } = validate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
-  //Validate that the user does not already exist
-  const userExist = await User.findOne({ email: req.body.email });
-  if (userExist)
-    return res.status(400).send("Email already exists on the server");
+    //Validate that the user does not already exist
+    const userExist = await User.findOne({ email: req.body.email });
+    if (userExist)
+      return res.status(400).send("Email already exists on the server");
 
-  //Build a user object mapping the properties sent in the request object
-  let user = new User(
-    lodash.pick(req.body, ["name", "email", "password", "isAdmin"])
-  );
+    //Build a user object mapping the properties sent in the request object
+    let user = new User(
+      lodash.pick(req.body, ["name", "email", "password", "isAdmin"])
+    );
 
-  /* 
+    /* 
     Hash the password:
     Hashing is the process of converting the orignal password into a fixed-length string. It allows us to save passwords in a database in a secure way.
     
@@ -52,24 +63,25 @@ router.post("/", async (req, res) => {
 
     At registration, the password provided by the user is hashed using a salt. We are saving the salt and the hash in the database, not the original password.
   */
-  const salt = await bcrypt.genSalt(10);
-  user.password = await bcrypt.hash(user.password, salt);
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(user.password, salt);
 
-  //Save the user to the Users collection
-  user = await user.save();
-  /*
+    //Save the user to the Users collection
+    user = await user.save();
+    /*
     When the user registers, log them in into the application automatically. 
     Resturn the JSON Web token as a header so the client can store it and use it 
     in the future
 
     By convention all custom headers should be prefix with 'x-'
   */
-  const token = user.generateAuthToken();
-  //Returned a simplified object to the client algong with the JSON web tocken in a header
-  res
-    .header("x-auth-token", token)
-    .send(lodash.pick(user, ["_id", "name", "email"]));
-});
+    const token = user.generateAuthToken();
+    //Returned a simplified object to the client algong with the JSON web tocken in a header
+    res
+      .header("x-auth-token", token)
+      .send(lodash.pick(user, ["_id", "name", "email"]));
+  })
+);
 
 //?Export router
 module.exports = router;

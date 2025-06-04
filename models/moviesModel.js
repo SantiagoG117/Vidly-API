@@ -1,6 +1,7 @@
 // This module contains all the logic for defining and validating a Movie
 
 const Joi = require("joi");
+Joi.objectId = require("joi-objectid")(Joi);
 const mongoose = require("../startup/dbConnection");
 const { genreSchema } = require("../models/genresModel");
 
