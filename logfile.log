@@ -12,3 +12,31 @@
 {"level":"info","message":"Connected to MongoDB"}
 {"level":"info","message":"Connected to MongoDB"}
 {"level":"info","message":"Connected to MongoDB"}
+{"level":"info","message":"Listening on port 5000"}
+{"level":"info","message":"Connected to MongoDB"}
+{"level":"info","message":"Listening on port 5000"}
+{"level":"info","message":"Connected to MongoDB"}
+{"level":"info","message":"Listening on port 5000"}
+{"level":"info","message":"Connected to MongoDB"}
+{"level":"info","message":"Listening on port 5000"}
+{"level":"info","message":"Connected to MongoDB"}
+{"level":"info","message":"Listening on port 5000"}
+{"level":"info","message":"MongoDB"}
+{"level":"info","message":"Listening on port 5000"}
+{"level":"info","message":"Connected to "}
+{"level":"info","message":"Listening on port 5000"}
+{"level":"error","message":"Calling config.get with null or undefined argument Calling config.get with null or undefined argument","stack":"Error: Calling config.get with null or undefined argument\n    at Config.get (C:\\Users\\santi\\Software Development Projects\\Node.js\\Vidly-API\\node_modules\\config\\lib\\config.js:166:11)\n    at C:\\Users\\santi\\Software Development Projects\\Node.js\\Vidly-API\\startup\\dbConnection.js:9:51\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"}
+{"level":"info","message":"Listening on port 5000"}
+{"level":"info","message":"Connected to mongodb://localhost/Vidly"}
+{"level":"info","message":"Listening on port 5000"}
+{"level":"info","message":"Connected to mongodb://localhost/Vidly"}
+{"level":"info","message":"Listening on port 5000"}
+{"level":"info","message":"Connected to mongodb://localhost/Vidly"}
+{"level":"info","message":"Listening on port 5000"}
+{"level":"info","message":"Connected to mongodb://localhost/Vidly"}
+{"level":"info","message":"Listening on port 5000"}
+{"level":"info","message":"Connected to mongodb://localhost/Vidly"}
+{"level":"info","message":"Listening on port 5000"}
+{"level":"info","message":"Connected to mongodb://localhost/Vidly"}
+{"level":"info","message":"Listening on port 5000"}
+{"level":"info","message":"Connected to mongodb://localhost/Vidly"}

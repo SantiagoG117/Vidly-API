@@ -11,7 +11,7 @@ const express = require("express"); //the express module returns a function
 const app = express(); //We can use that function to create an express object called app that will represent our application
 
 //? Load the logging module
-require("./startup/logging");
+require("./startup/logging")();
 //? Load the routes module
 require("./startup/routes")(app);
 //? Load config module
