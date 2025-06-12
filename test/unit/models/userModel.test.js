@@ -7,7 +7,7 @@ const config = require("config");
 const mongoose = require("mongoose");
 require("../../../startup/logging"); //ignores Winston logs in our testing
 
-//Test Suite: Container for multiple tests
+
 describe("userModel.generateAuthToken", () => {
   it("Should return a valid JSON Web Token", () => {
     //Create the user

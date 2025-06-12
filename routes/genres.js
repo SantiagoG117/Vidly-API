@@ -15,9 +15,10 @@ const router = express.Router();
 const { Genres, validate } = require("../models/genresModel");
 
 //? Export middleware
+const asyncMiddleware = require("../middleware/async");
 const authorization = require("../middleware/authorization");
 const isAdmin = require("../middleware/isAdmin");
-const asyncMiddleware = require("../middleware/async");
+const mongoose = require("mongoose");
 
 //? Add routes to the router
 //GET all
@@ -40,10 +41,15 @@ router.get(
     
     To access route parameters we must call req.params.id
   */
-    //Get the genre under the provided fid or return 400 if the genre does not exist
+
+    //Verify the id is a valid MongoDB id
+    if (!mongoose.Types.ObjectId.isValid(req.params.id))
+      return res.status(404).send("Invalid ID.");
+
+    //Get the genre under the provided id or return 404 if the genre does not exist
     const genre = await Genres.findById(req.params.id);
     if (!genre)
-      res.status(404).send("There are no genres under the provided id");
+      return res.status(404).send("There are no genres under the provided id");
 
     res.send(genre);
   })

@@ -1,3 +1,4 @@
 node_modules/
 .env
-jwt_Instructions
+jwt_Instructions.txt
+logfile.log
