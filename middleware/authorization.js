@@ -21,6 +21,7 @@ function authorization(req, res, next) {
     req.user = payload;
     //Pass control to the route handler(the next middleware function in the Request Processing Pipeline)
     next();
+  
   } catch (ex) {
     res.status(400).send("Invalid token"); //400 Bad request
   }
