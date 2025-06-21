@@ -17,7 +17,7 @@ describe("authorization", () => {
   afterEach(async () => {
     //Clean up function
     await Genres.deleteMany();
-    server.close();
+    await server.close();
   });
 
   //? Build Happy Path to an endpoint that requires authorization
