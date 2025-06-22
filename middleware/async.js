@@ -1,5 +1,6 @@
 /* 
-  Factory function: Returns a reference of a route handler function (which is async by default) that takes the req, res, next parameters. 
+  ? Factory function: 
+  Returns a reference of a route handler function (which is async by default) that takes the req, res, next parameters. 
   At runtime, Express will call this function reference and pass the values for the req, res, next parameters, 
   which are require to execute the logic of each route handler or pass control to the Error middleware in case of 
   rejected promises. 

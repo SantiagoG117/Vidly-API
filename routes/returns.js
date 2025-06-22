@@ -2,14 +2,14 @@
 const express = require("express");
 const router = express.Router();
 
-//? Middleware
+//? External dependencies
 const moment = require("moment");
 const authorization = require("../middleware/authorization");
-const { Rentals } = require("../models/rentalsModels");
+const inputValidator = require("../middleware/validate");
+const { Rentals, validate } = require("../models/rentalsModels");
 const { Movies } = require("../models/moviesModel");
 
-router.post("/", authorization, async (req, res) => {
-  if (!req.body.customerId || !req.body.movieId) return res.status(400).send();
+router.post("/", [authorization, inputValidator(validate)], async (req, res) => {
 
   //Find the rental
   const rental = await Rentals.findOne({
