@@ -7,6 +7,7 @@ const { Customers, validate } = require("../models/customersModel");
 
 //? Middlewares
 const authorization = require("../middleware/authorization");
+const validateInput = require("../middleware/validate");
 const isAdmin = require("../middleware/isAdmin");
 const asyncMiddleware = require("../middleware/async");
 
@@ -37,12 +38,8 @@ router.get(
 //POST:
 router.post(
   "/",
-  authorization,
+  [authorization, validateInput(validate)],
   asyncMiddleware(async (req, res) => {
-    //Validate the object sent by the request
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
     //Build a customer object mapping the properties of the object sent in the body of the request
     const customer = new Customers({
       name: req.body.name,
@@ -59,12 +56,8 @@ router.post(
 //PUT
 router.put(
   "/:id",
-  authorization,
+  [authorization, validateInput(validate)],
   asyncMiddleware(async (req, res) => {
-    //Validate the object sent in the body of the request
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
     //Get the customer under the provided id or return 404 if it does not exist
     const customer = await Customers.findById(req.params.id);
     if (!customer)

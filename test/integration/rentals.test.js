@@ -2,6 +2,7 @@
 const request = require("supertest");
 const mongoose = require("mongoose");
 const { User } = require("../../models/usersModel");
+const { Rentals } = require("../../models/rentalsModels");
 
 //? Testing suite
 describe("/api/rentals", () => {
@@ -14,6 +15,7 @@ describe("/api/rentals", () => {
   afterEach(async () => {
     // Close server and clean up the test database
     await server.close();
+    await Rentals.deleteMany();
   });
 
   describe("POST /", () => {
