@@ -37,13 +37,14 @@ const { Movies } = require("../../models/moviesModel");
 const { Genres } = require("../../models/genresModel");
 
 describe("/api/returns", () => {
-  //? Load the server before each test and close it after each test is completed
+  //? Before and after each logic 
   beforeEach(() => {
+    // Start up the server
     server = require("../../index");
   });
   afterEach(async () => {
+    //Close the server and up the test database
     await server.close();
-    //Clean up the rentals test collection
     await Rentals.deleteMany();
     await Movies.deleteMany();
   });
@@ -100,7 +101,7 @@ describe("/api/returns", () => {
     });
 
     //? Build test request
-    const postTestRequest = (customerId, movieId) => {
+    const testPostRequest = (customerId, movieId) => {
       return request(server)
         .post("/api/returns")
         .set("x-auth-token", token)
@@ -109,17 +110,17 @@ describe("/api/returns", () => {
 
     it("should return 401 if the client is not authorized", async () => {
       token = "";
-      const res = await postTestRequest();
+      const res = await testPostRequest();
       expect(res.status).toBe(401);
     });
 
     it("should return 400 if the customerId is not provided", async () => {
-      const res = await postTestRequest(movieId);
+      const res = await testPostRequest(movieId);
       expect(res.status).toBe(400);
     });
 
     it("should return 400 if the movie_id is not provided", async () => {
-      const res = await postTestRequest(customerId);
+      const res = await testPostRequest(customerId);
 
       expect(res.status).toBe(400);
     });
@@ -129,7 +130,7 @@ describe("/api/returns", () => {
       customerId = new mongoose.Types.ObjectId();
       movieId = new mongoose.Types.ObjectId();
 
-      const res = await postTestRequest(customerId, movieId);
+      const res = await testPostRequest(customerId, movieId);
       expect(res.status).toBe(404);
     });
 
@@ -139,18 +140,18 @@ describe("/api/returns", () => {
 
       await rental.save();
 
-      const res = await postTestRequest();
+      const res = await testPostRequest();
 
       expect(res.status).toBe(400);
     });
 
     it("should return 200 if the rental was processed sucessfully", async () => {
-      const res = await postTestRequest(customerId, movieId);
+      const res = await testPostRequest(customerId, movieId);
       expect(res.status).toBe(200);
     });
 
     it("should set the return date of the rental", async () => {
-      const res = await postTestRequest(customerId, movieId);
+      const res = await testPostRequest(customerId, movieId);
       //Transform the return date to a date type
       const returnedDate = new Date(res.body.dateReturned);
       //Verify that return date is a valid date
@@ -164,20 +165,20 @@ describe("/api/returns", () => {
       */
       rental.dateOut = moment().add(-7, "days").toDate();
       await rental.save();
-      const res = await postTestRequest(customerId, movieId);
+      const res = await testPostRequest(customerId, movieId);
       expect(typeof res.body.rentalFee).toBe("number");
       expect(res.body.rentalFee).toBe(14);
     });
 
     it(`it should increase the movie's stock by 1`, async () => {
-      await postTestRequest(customerId, movieId);
+      await testPostRequest(customerId, movieId);
       //Set as movie the updated movie object modified in the /returns route
       movie = await Movies.findById(movieId);
       expect(movie.numberInStock).toBe(2);
     });
 
     it(`should return the rental object`, async () => {
-      const res = await postTestRequest(customerId, movieId);
+      const res = await testPostRequest(customerId, movieId);
 
       expect(res.body).toHaveProperty("_id");
       expect(res.body).toHaveProperty("dateOut");

@@ -8,7 +8,7 @@
 module.exports = function (validator) {
   return async (req, res, next) => {
     const { error } = validator(req.body); //At runtime the validator function will be called with the value for res provided by Express
-    if (error) res.status(400).send(error.details[0].message);
-    next();// If no error was returned by the validator, pass control to the next middleware
+    if (error) return res.status(400).send(error.details[0].message);
+    next(); // If no error was returned by the validator, pass control to the next middleware
   };
 };

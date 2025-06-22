@@ -9,6 +9,7 @@ const { Movies } = require("../models/moviesModel");
 
 //? Middleware
 const authorization = require("../middleware/authorization");
+const inputValidator = require("../middleware/validate");
 const asyncMiddleware = require("../middleware/async");
 
 //? Routes
@@ -24,12 +25,8 @@ router.get(
 //POST
 router.post(
   "/",
-  authorization,
+  [authorization, inputValidator(validate)],
   asyncMiddleware(async (req, res) => {
-    //Validate the object sent by the client request
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
     //Find the customer under the customer ID sent by the request
     const customer = await Customers.findById(req.body.customerId);
     if (!customer) return res.status(404).send("Invalid customer ID");
