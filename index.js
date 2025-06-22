@@ -17,6 +17,9 @@ require("./startup/routes")(app);
 //? Load config module
 require("./startup/config");
 
+//? Load the production middleware
+require("./startup/production")(app);
+
 //? View Engines
 app.set("view engine", "pug");
 
